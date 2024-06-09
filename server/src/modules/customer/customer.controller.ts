@@ -14,7 +14,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     try {
-        const user = await prisma.customer.findFirst({ where: { email } });
+        const user = await prisma.user.findFirst({ where: { email } });
         if (user) {
             return next(
                 createHttpError(400, "User already exists with this email.")
@@ -22,7 +22,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const hash = await bcrypt.hash(password, 10);
-        await prisma.customer.create({
+        await prisma.user.create({
             data: {
                 name,
                 email,
@@ -43,7 +43,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     try {
-        const user = await prisma.customer.findFirst({ where: { email } });
+        const user = await prisma.user.findFirst({ where: { email } });
         if (!user) {
             return next(createHttpError(404, "User not found."));
         }
@@ -70,4 +70,20 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-export { createUser, loginUser };
+const getCustomers = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const customers = await prisma.user.findMany({
+            where: { role: "CUSTOMER" },
+        });
+
+        return res.json(customers);
+    } catch (err) {
+        return next(createHttpError(500, "Internal server error"));
+    }
+};
+
+export { createUser, getCustomers, loginUser };

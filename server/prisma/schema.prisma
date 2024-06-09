@@ -8,104 +8,149 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
-  role     Role   @default(CUSTOMER)
-
-  @@index([email])
-}
-
-enum Role {
-  CUSTOMER
-  AMDIN
-}
-
-model Customer {
   id       Int     @id @default(autoincrement())
   name     String
   email    String  @unique
   password String
   role     Role    @default(CUSTOMER)
-  orders   Order[]
+  isActive Boolean @default(true)
+
+  vendors Vendor[]
+  orders  Order[]
+
+  createdAt DateTime @default(now())
 }
 
-model Billboard {
-  id        String     @id @default(uuid())
-  label     String
-  imageUrl  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  category  Category[] // One-to-many relationship with Category
+model Vendor {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  phone       String?
+
+  userId     Int
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products   Product[]
+  categories Category[]
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Category {
-  id          String    @id @default(uuid())
-  name        String    @unique
-  billboardId String
-  billboard   Billboard @relation(fields: [billboardId], references: [id])
-  products    Product[] @relation("CategoryToProduct")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id   Int    @id @default(autoincrement())
+  name String
 
-  @@index([billboardId])
+  products Product[]
+  vendor   Vendor?   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendorId Int?
 }
 
 model Product {
-  id         String  @id @default(uuid())
-  price      Decimal
-  isFeatured Boolean @default(false)
-  isArchived Boolean @default(false)
-  name       String
-  images     Image[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal  @default(0.00)
+  stock       Int
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
+  vendorId   Int
+  vendor     Vendor         @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  categoryId Int
+  category   Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  images     ProductImage[]
   orderItems OrderItem[]
-  categoryId String
-  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
 
+  @@index([vendorId])
   @@index([categoryId])
+  @@index([name])
+}
+
+model ProductImage {
+  id       Int    @id @default(autoincrement())
+  imageUrl String
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  totalAmount Decimal     @default(0.00)
+  status      OrderStatus
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  userId     Int
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+  payments   Payment[]
+  shippings  Shipping[]
+
+  @@index([userId])
+  @@index([status])
 }
 
 model OrderItem {
-  id String @id @default(uuid())
+  id       Int     @id @default(autoincrement())
+  quantity Int
+  price    Decimal @default(0.00)
 
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  quantity Int     @default(1)
-  price    Decimal
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
   @@index([productId])
 }
 
-model Order {
-  id     String  @id @default(uuid())
-  isPaid Boolean @default(false)
-  status String  @default("pending")
+model Payment {
+  id     Int           @id @default(autoincrement())
+  method PaymentMethod
+  amount Decimal       @default(0.00)
+  date   DateTime      @default(now())
 
-  customerId Int
-  customer   Customer    @relation(fields: [customerId], references: [id])
-  orderItems OrderItem[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-  @@index([customerId])
+  @@index([orderId])
 }
 
-model Image {
-  id  String @id @default(uuid())
-  url String
+model Shipping {
+  id            Int       @id @default(autoincrement())
+  address       String
+  city          String
+  state         String
+  postalCode    String
+  country       String
+  shippedDate   DateTime?
+  deliveredDate DateTime?
 
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-  @@index([productId])
+  @@index([orderId])
+}
+
+enum Role {
+  CUSTOMER
+  VENDOR
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  ONLINE
+  DELIVERY
 }

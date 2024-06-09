@@ -8,7 +8,8 @@ const createProduct = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { name, images, price, categoryId, vendorId } = req.body;
+    const { name, description, images, price, stock, categoryId, vendorId } =
+        req.body;
 
     try {
         const product = await prisma.product.findFirst({ where: { name } });
@@ -21,6 +22,8 @@ const createProduct = async (
         await prisma.product.create({
             data: {
                 name,
+                description,
+                stock,
                 images,
                 price: parseFloat(price),
                 categoryId,
@@ -37,9 +40,9 @@ const createProduct = async (
 const getProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const product = await prisma.product.findFirst({
-            where: { id: req.params.productId },
+            where: { id: +req.params.productId },
         });
-        res.json({ product });
+        res.json(product);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }

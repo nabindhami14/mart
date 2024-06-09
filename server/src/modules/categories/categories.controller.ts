@@ -8,7 +8,7 @@ const createCategoery = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { name, vendor, billboard } = req.body;
+    const { name } = req.body;
     if (!name) {
         const error = createHttpError(400, "All fields are required");
         return next(error);
@@ -23,7 +23,7 @@ const createCategoery = async (
         }
 
         await prisma.category.create({
-            data: { name, vendor, billboard },
+            data: { name },
         });
 
         res.status(201).json({});
@@ -39,22 +39,23 @@ const getCategories = async (
 ) => {
     try {
         const categories = await prisma.category.findMany();
-        res.json({ categories });
+        res.json(categories);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }
 };
+
 const getProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const products = await prisma.category.findMany({
+        const categories = await prisma.category.findFirst({
             where: {
-                id: req.params.categoryId,
+                id: +req.params.categoryId,
             },
             select: {
                 products: true,
             },
         });
-        res.json({ products });
+        res.json(categories?.products);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }
