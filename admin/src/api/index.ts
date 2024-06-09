@@ -25,11 +25,25 @@ export const register = async (data: {
   password: string;
 }) => api.post("/api/users/register", data);
 
-export const getBooks = async () => api.get("/api/books");
-
 export const createBook = async (data: FormData) =>
   api.post("/api/books", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+
+// CATEGORIES
+export const getCategories = async () => api.get("/api/categories");
+export const getCategory = async (id: number) =>
+  api.get(`/api/categories/${id}`);
+
+// ORDERS
+export const getOrders = async () => api.get("/api/orders");
+export const getOrder = async (id: number) => api.get(`/api/orders/${id}`);
+
+// PRODUCTS
+export const getProducts = async () => api.get("/api/products");
+export const getProduct = async (id: number) => api.get(`/api/products/${id}`);
+
+// ADMIN OVERVIEW
+export const getOverview = async () => api.get("/api/admins/overview");

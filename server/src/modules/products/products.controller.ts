@@ -37,10 +37,39 @@ const createProduct = async (
     }
 };
 
+const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const products = await prisma.product.findMany({
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                stock: true,
+                isArchived: true,
+                createdAt: true,
+                images: { select: { imageUrl: true } },
+            },
+        });
+        res.json(products);
+    } catch (err) {
+        return next(createHttpError(500, "Internal server error"));
+    }
+};
 const getProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const product = await prisma.product.findFirst({
             where: { id: +req.params.productId },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                stock: true,
+                isArchived: true,
+                createdAt: true,
+                images: { select: { imageUrl: true } },
+            },
         });
         res.json(product);
     } catch (err) {
@@ -48,4 +77,4 @@ const getProduct = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-export { createProduct, getProduct };
+export { createProduct, getProduct, getProducts };

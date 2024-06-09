@@ -85,5 +85,16 @@ const getCustomers = async (
         return next(createHttpError(500, "Internal server error"));
     }
 };
+const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const customers = await prisma.order.findMany({
+            where: { userId: 1 },
+        });
 
-export { createUser, getCustomers, loginUser };
+        return res.json(customers);
+    } catch (err) {
+        return next(createHttpError(500, "Internal server error"));
+    }
+};
+
+export { createUser, getCustomers, getOrders, loginUser };

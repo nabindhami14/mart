@@ -7,6 +7,7 @@ import categoriesRouter from "./modules/categories/categories.routes";
 import customerRouter from "./modules/customer/customer.routes";
 
 import globalErrorHandler from "./middlewares/globalErrorHandler";
+import adminRouter from "./modules/admin/admin.routes";
 import orderRouter from "./modules/orders/order.routes";
 import productsRouter from "./modules/products/products.routes";
 import vendorRouter from "./modules/vendors/vendors.routes";
@@ -26,6 +27,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/api/users", customerRouter);
+app.use("/api/admins", adminRouter);
 app.use("/api/vendors", vendorRouter);
 
 app.use("/api/categories", categoriesRouter);

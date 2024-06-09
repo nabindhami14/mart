@@ -31,7 +31,28 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
     try {
         const orders = await prisma.order.findMany({
-            include: { orderItems: true, payments: true, shippings: true },
+            select: {
+                id: true,
+                status: true,
+                totalAmount: true,
+                createdAt: true,
+                orderItems: {
+                    select: {
+                        product: {
+                            select: {
+                                name: true,
+                            },
+                        },
+                        quantity: true,
+                        price: true,
+                    },
+                },
+                payments: {
+                    select: {
+                        method: true,
+                    },
+                },
+            },
         });
         res.status(200).json(orders);
     } catch (error) {
