@@ -1,7 +1,7 @@
 {
     "name": "elib",
     "version": "1.0.0",
-    "description": "This is a ebook api project",
+    "description": "mart",
     "main": "index.js",
     "scripts": {
         "dev": "nodemon server.ts"
@@ -9,12 +9,6 @@
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
     },
-    "keywords": [
-        "rest",
-        "api",
-        "express"
-    ],
-    "author": "Rakesh K <rakesh@codersgyan.com>",
     "license": "ISC",
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
