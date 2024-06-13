@@ -3,7 +3,6 @@ import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { login } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,9 +15,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { adminLogin } from "@/api/admin";
 import { useToken } from "@/contexts/access-token";
 
-const Login = () => {
+const AdminLoginPage = () => {
   const navigate = useNavigate();
   const setToken = useToken((state) => state.setToken);
 
@@ -26,7 +26,7 @@ const Login = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const mutation = useMutation({
-    mutationFn: login,
+    mutationFn: adminLogin,
     onSuccess: (response) => {
       setToken(response.data.accessToken);
       navigate("/");
@@ -87,7 +87,7 @@ const Login = () => {
 
             <div className="mt-4 text-center text-sm">
               Don't have an account?{" "}
-              <Link to={"/auth/register"} className="underline">
+              <Link to={"/admin/auth/register"} className="underline">
                 Sign up
               </Link>
             </div>
@@ -98,4 +98,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLoginPage;

@@ -30,11 +30,10 @@ const DashboardLayout = () => {
   const { token, setToken } = useToken((state) => state);
 
   if (token === "") {
-    return <Navigate to={"/auth/login"} replace />;
+    return <Navigate to={"/admin/auth/login"} replace />;
   }
 
   const logout = () => {
-    console.log("Logging out!");
     setToken("");
   };
 
@@ -50,7 +49,7 @@ const DashboardLayout = () => {
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <NavLink
-                to="/"
+                to="/admin/dashboard"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -62,7 +61,7 @@ const DashboardLayout = () => {
               </NavLink>
 
               <NavLink
-                to="/billboards"
+                to="/admin/dashboard/billboards"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -73,7 +72,7 @@ const DashboardLayout = () => {
                 Billboards{" "}
               </NavLink>
               <NavLink
-                to="/categories"
+                to="/admin/dashboard/categories"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -84,7 +83,7 @@ const DashboardLayout = () => {
                 Categories{" "}
               </NavLink>
               <NavLink
-                to="/orders"
+                to="/admin/dashboard/orders"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -95,7 +94,7 @@ const DashboardLayout = () => {
                 Orders{" "}
               </NavLink>
               <NavLink
-                to="/products"
+                to="/admin/dashboard/products"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -107,7 +106,7 @@ const DashboardLayout = () => {
               </NavLink>
 
               <NavLink
-                to="/settings"
+                to="/admin/dashboard/settings"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -140,7 +139,7 @@ const DashboardLayout = () => {
                 <StoreSwitcher />
 
                 <NavLink
-                  to="/"
+                  to="/admin/dashboard"
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -152,7 +151,7 @@ const DashboardLayout = () => {
                 </NavLink>
 
                 <NavLink
-                  to="/billboards"
+                  to="/admin/dashboard/billboards"
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -163,7 +162,7 @@ const DashboardLayout = () => {
                   Billboards{" "}
                 </NavLink>
                 <NavLink
-                  to="/categories"
+                  to="/admin/dashboard/categories"
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -174,7 +173,7 @@ const DashboardLayout = () => {
                   Categories{" "}
                 </NavLink>
                 <NavLink
-                  to="/orders"
+                  to="/admin/dashboard/orders"
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -185,7 +184,7 @@ const DashboardLayout = () => {
                   Orders{" "}
                 </NavLink>
                 <NavLink
-                  to="/products"
+                  to="/admin/dashboard/products"
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -197,7 +196,7 @@ const DashboardLayout = () => {
                 </NavLink>
 
                 <NavLink
-                  to="/settings"
+                  to="/admin/dashboard/settings"
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"

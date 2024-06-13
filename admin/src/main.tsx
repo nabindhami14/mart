@@ -7,6 +7,7 @@ import { RouterProvider } from "react-router-dom";
 import ThemeProvider from "@/contexts/theme-provider";
 import "@/index.css";
 import router from "@/routes";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
+        <Toaster />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ThemeProvider>

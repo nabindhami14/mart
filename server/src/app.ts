@@ -26,7 +26,7 @@ app.get("/", (req, res, next) => {
     res.json({ message: "Health Check" });
 });
 
-app.use("/api/users", customerRouter);
+app.use("/api/customers", customerRouter);
 app.use("/api/admins", adminRouter);
 app.use("/api/vendors", vendorRouter);
 

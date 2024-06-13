@@ -26,4 +26,5 @@ export interface Product {
   images: {
     imageUrl: string;
   }[];
+  quantity: number;
 }

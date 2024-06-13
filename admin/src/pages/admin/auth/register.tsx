@@ -3,7 +3,7 @@ import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { register } from "@/api";
+import { adminRegister } from "@/api/admin";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const Register = () => {
+const AdminRegisterPage = () => {
   const navigate = useNavigate();
 
   const nameRef = useRef<HTMLInputElement>(null);
@@ -23,7 +23,7 @@ const Register = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const mutation = useMutation({
-    mutationFn: register,
+    mutationFn: adminRegister,
     onSuccess: () => {
       navigate("/auth/login");
     },
@@ -87,7 +87,7 @@ const Register = () => {
           </div>
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
-            <Link to={"/auth/login"} className="underline">
+            <Link to={"/admin/auth/login"} className="underline">
               Sign in
             </Link>
           </div>
@@ -97,4 +97,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default AdminRegisterPage;
