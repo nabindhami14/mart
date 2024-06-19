@@ -1,5 +1,9 @@
 const VendorsOrdersPage = () => {
-  return <div>VendorsOrdersPage</div>;
+  return (
+    <div>
+      <div className="">VENDORS ORDERS</div>
+    </div>
+  );
 };
 
 export default VendorsOrdersPage;

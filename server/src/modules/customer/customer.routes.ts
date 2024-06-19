@@ -1,16 +1,16 @@
 import express from "express";
 import {
-    createUser,
     getCustomers,
     getOrders,
-    loginUser,
+    loginCustomer,
+    registerCustomer,
 } from "./customer.controller";
 
 const customerRouter = express.Router();
 
 // routes
-customerRouter.post("/register", createUser);
-customerRouter.post("/login", loginUser);
+customerRouter.post("/auth/register", registerCustomer);
+customerRouter.post("/auth/login", loginCustomer);
 
 customerRouter.post("/", getCustomers);
 

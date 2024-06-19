@@ -8,7 +8,7 @@ const createCategoery = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { name } = req.body;
+    const { name, vendorId } = req.body;
     if (!name) {
         const error = createHttpError(400, "All fields are required");
         return next(error);
@@ -23,11 +23,37 @@ const createCategoery = async (
         }
 
         await prisma.category.create({
-            data: { name },
+            data: { name, vendorId },
         });
 
         res.status(201).json({});
     } catch (err) {
+        return next(createHttpError(500, "Internal server error"));
+    }
+};
+
+const addBillboard = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { title, description, uri } = req.body;
+    try {
+        await prisma.billboard.create({
+            data: {
+                title,
+                description,
+                image: { create: { uri } },
+                category: {
+                    connect: {
+                        id: +req.params.categoryId,
+                    },
+                },
+            },
+        });
+        res.json({});
+    } catch (err) {
+        console.log(err);
         return next(createHttpError(500, "Internal server error"));
     }
 };
@@ -45,20 +71,25 @@ const getCategories = async (
     }
 };
 
-const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+const getCategory = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const categories = await prisma.category.findFirst({
+        const category = await prisma.category.findFirst({
             where: {
                 id: +req.params.categoryId,
             },
-            select: {
+            include: {
                 products: true,
+                billboard: {
+                    include: {
+                        image: true,
+                    },
+                },
             },
         });
-        res.json(categories?.products);
+        res.json(category);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }
 };
 
-export { createCategoery, getCategories, getProducts };
+export { addBillboard, createCategoery, getCategories, getCategory };

@@ -3,21 +3,27 @@ import prisma from "../../config/db";
 
 export const createOrder = async (req: Request, res: Response) => {
     try {
-        const { totalAmount, status, userId, orderItems, payments, shippings } =
-            req.body;
+        const {
+            totalAmount,
+            status,
+            customerId,
+            orderItems,
+            payments,
+            shippings,
+        } = req.body;
 
         const order = await prisma.order.create({
             data: {
                 totalAmount,
                 status,
-                user: { connect: { id: userId } },
+                customer: { connect: { id: customerId } },
                 orderItems: {
                     create: orderItems,
                 },
-                payments: {
+                payment: {
                     create: payments,
                 },
-                shippings: {
+                shipping: {
                     create: shippings,
                 },
             },
@@ -47,7 +53,7 @@ export const getOrders = async (req: Request, res: Response) => {
                         price: true,
                     },
                 },
-                payments: {
+                payment: {
                     select: {
                         method: true,
                     },
@@ -66,7 +72,7 @@ export const getOrderById = async (req: Request, res: Response) => {
 
         const order = await prisma.order.findFirst({
             where: { id: parseInt(id) },
-            include: { orderItems: true, payments: true, shippings: true },
+            include: { orderItems: true, payment: true, shipping: true },
         });
         if (!order) return res.status(404).json({ error: "Order not found" });
         res.status(200).json(order);
@@ -78,22 +84,28 @@ export const getOrderById = async (req: Request, res: Response) => {
 export const updateOrder = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        const { totalAmount, status, userId, orderItems, payments, shippings } =
-            req.body;
+        const {
+            totalAmount,
+            status,
+            customerId,
+            orderItems,
+            payments,
+            shippings,
+        } = req.body;
 
         const order = await prisma.order.update({
             where: { id: parseInt(id) },
             data: {
                 totalAmount,
                 status,
-                user: { connect: { id: userId } },
+                customer: { connect: { id: customerId } },
                 orderItems: {
                     update: orderItems,
                 },
-                payments: {
+                payment: {
                     update: payments,
                 },
-                shippings: {
+                shipping: {
                     update: shippings,
                 },
             },

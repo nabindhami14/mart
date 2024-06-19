@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 
 // CUSTOMER PAGE
 import MainLayout from "@/layouts/main-layout";
-import CategoriesPage from "@/pages/customer/category/categories";
 import HomePage from "@/pages/customer/home";
 import ProductsPage from "@/pages/customer/product/products";
 
@@ -11,27 +10,29 @@ import AuthLayout from "@/layouts/auth-layout";
 
 // PAGES
 import Dashboard from "@/pages/admin/dashboard";
-import Billboards from "@/pages/admin/dashboard/billboards";
-import Categories from "@/pages/admin/dashboard/categories";
-import Orders from "@/pages/admin/dashboard/orders";
-import Products from "@/pages/admin/dashboard/products";
-import Settings from "@/pages/admin/dashboard/settings";
 
 // AUTH PAGES
 
 // VENDORS PAGE
 import AdminAuthLayout from "@/layouts/admin-auth-layout";
-import DashboardLayout from "@/layouts/dashboard-layout";
 import VendorLayout from "@/layouts/vendor-layout";
 import AdminLoginPage from "@/pages/admin/auth/login";
 import AdminRegisterPage from "@/pages/admin/auth/register";
 import CustomerLogin from "@/pages/customer/auth/login";
 import CustomerRegister from "@/pages/customer/auth/register";
 import CheckoutPage from "@/pages/customer/checkout";
-import VendorsPage from "@/pages/customer/vendors/vendors";
 import VendorsHomePage from "@/pages/vendor/vendors-home-page";
 import VendorsOrdersPage from "@/pages/vendor/vendors-orders-page";
-import VendorsProductPage from "@/pages/vendor/vendors-product-page";
+
+import AdminLayout from "@/layouts/admin-layout";
+import AdminVendorsPage from "@/pages/admin/dashboard/billboards";
+import CategoriesPage from "@/pages/customer/category/categories";
+import CategoryPage from "@/pages/customer/category/category";
+import VendorPage from "@/pages/customer/vendors/vendor";
+import VendorsPage from "@/pages/customer/vendors/vendors";
+import VendorsCategoriesPage from "@/pages/vendor/vendors-categories-page";
+import VendorsProductsPage from "@/pages/vendor/vendors-products-page";
+import VendorsSettingsPAge from "@/pages/vendor/vendors-settings-page";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +42,9 @@ const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "vendors", element: <VendorsPage /> },
+      { path: "vendors/:vendorId", element: <VendorPage /> },
       { path: "categories", element: <CategoriesPage /> },
+      { path: "categories/:categoryId", element: <CategoryPage /> },
       { path: "checkout", element: <CheckoutPage /> },
       {
         path: "/auth",
@@ -59,21 +62,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-
-  // {
-  //   path: "/auth",
-  //   element: <AuthLayout />,
-  //   children: [
-  //     {
-  //       path: "login",
-  //       element: <LoginPage />,
-  //     },
-  //     {
-  //       path: "register",
-  //       element: <RegisterPage />,
-  //     },
-  //   ],
-  // },
 
   {
     path: "admin",
@@ -94,31 +82,15 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <DashboardLayout />,
+        element: <AdminLayout />,
         children: [
           {
-            path: "",
+            path: "home",
             element: <Dashboard />,
           },
           {
-            path: "billboards",
-            element: <Billboards />,
-          },
-          {
-            path: "categories",
-            element: <Categories />,
-          },
-          {
-            path: "orders",
-            element: <Orders />,
-          },
-          {
-            path: "products",
-            element: <Products />,
-          },
-          {
-            path: "settings",
-            element: <Settings />,
+            path: "vendors",
+            element: <AdminVendorsPage />,
           },
         ],
       },
@@ -126,12 +98,14 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/vendors",
+    path: "/vendors/:vendorId",
     element: <VendorLayout />,
     children: [
       { path: "home", element: <VendorsHomePage /> },
       { path: "orders", element: <VendorsOrdersPage /> },
-      { path: "products", element: <VendorsProductPage /> },
+      { path: "products", element: <VendorsProductsPage /> },
+      { path: "categories", element: <VendorsCategoriesPage /> },
+      { path: "settings", element: <VendorsSettingsPAge /> },
     ],
   },
 ]);

@@ -23,6 +23,7 @@ import {
   PaintBucket,
   Search,
   Settings,
+  ShoppingBasket,
 } from "lucide-react";
 import { NavLink, Navigate, Outlet } from "react-router-dom";
 
@@ -49,7 +50,7 @@ const DashboardLayout = () => {
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <NavLink
-                to="/admin/dashboard"
+                to="/admin/dashboard/home"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -61,15 +62,15 @@ const DashboardLayout = () => {
               </NavLink>
 
               <NavLink
-                to="/admin/dashboard/billboards"
+                to="/admin/dashboard/vendors"
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
                   }`;
                 }}
               >
-                <BookMarked className="h-4 w-4" />
-                Billboards{" "}
+                <ShoppingBasket className="h-4 w-4" />
+                Vendors{" "}
               </NavLink>
               <NavLink
                 to="/admin/dashboard/categories"

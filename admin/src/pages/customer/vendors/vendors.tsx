@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
-import { getVendors } from "@/api/customer";
 import {
   Card,
   CardContent,
@@ -10,28 +10,32 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 
+import { getVendors } from "@/api/customer";
+import { IVendor } from "@/types";
+
 const VendorsPage = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["vendors"],
     queryFn: getVendors,
-    staleTime: 10000, // in Milli-seconds
   });
 
-  if (isLoading || isError) return <Loader2 />;
+  if (isLoading) return <Loader2 />;
 
-  console.log(data?.data);
+  const vendors = data?.data as IVendor[];
 
   return (
     <div>
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 my-10">
-        {data?.data.map((p) => (
-          <Card key={p.id}>
-            <CardHeader>{p.name}</CardHeader>
-            <CardContent>
-              <CardDescription>{p.description}</CardDescription>
-            </CardContent>
-            <CardFooter>{p.phone}</CardFooter>
-          </Card>
+        {vendors.map((p) => (
+          <Link to={`/vendors/${p.id}`} key={p.id}>
+            <Card>
+              <CardHeader>{p.name}</CardHeader>
+              <CardContent>
+                <CardDescription>{p.description}</CardDescription>
+              </CardContent>
+              <CardFooter>{p.location}</CardFooter>
+            </Card>
+          </Link>
         ))}
       </section>
     </div>

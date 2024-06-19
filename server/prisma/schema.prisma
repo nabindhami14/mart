@@ -7,103 +7,107 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model Customer {
   id       Int     @id @default(autoincrement())
   name     String
   email    String  @unique
   password String
-  role     Role    @default(CUSTOMER)
   isActive Boolean @default(true)
 
-  vendors Vendor[]
-  orders  Order[]
+  orders Order[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vendor {
   id          Int     @id @default(autoincrement())
   name        String
+  title       String
+  email       String  @unique
+  password    String
   description String?
   phone       String?
+  location    String?
+  isVerified  Boolean @default(false)
 
-  userId     Int
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   products   Product[]
   categories Category[]
+  orders     Order[]
+  billboard  Billboard? @relation("VendorBillboard")
+  images     Image[]    @relation("VendorImages")
 
   createdAt DateTime @default(now())
-
-  @@index([userId])
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
 
-  products Product[]
-  vendor   Vendor?   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
-  vendorId Int?
+  vendorId  Int
+  vendor    Vendor     @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  products  Product[]
+  billboard Billboard? @relation("CategoryBillboard")
+  images    Image[]    @relation("CategoryImages")
+
+  @@index([vendorId])
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
-  price       Decimal  @default(0.00)
-  stock       Int
-  isArchived  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  price       Float   @default(0.00)
+  stock       Int     @default(1)
+  isArchived  Boolean @default(false)
 
   vendorId   Int
-  vendor     Vendor         @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendor     Vendor      @relation(fields: [vendorId], references: [id], onDelete: Cascade)
   categoryId Int
-  category   Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  images     ProductImage[]
+  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  images     Image[]     @relation("ProductImages")
   orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([vendorId])
   @@index([categoryId])
-  @@index([name])
-}
-
-model ProductImage {
-  id       Int    @id @default(autoincrement())
-  imageUrl String
-
-  productId Int
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@index([productId])
 }
 
 model Order {
   id          Int         @id @default(autoincrement())
-  totalAmount Decimal     @default(0.00)
+  totalAmount Float       @default(0.00)
   status      OrderStatus
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
 
-  userId     Int
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customerId Int
+  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  vendor     Vendor?     @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  vendorId   Int?
   orderItems OrderItem[]
-  payments   Payment[]
-  shippings  Shipping[]
+  payment    Payment?
+  shipping   Shipping?
 
-  @@index([userId])
-  @@index([status])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model OrderItem {
-  id       Int     @id @default(autoincrement())
+  id       Int   @id @default(autoincrement())
   quantity Int
-  price    Decimal @default(0.00)
+  price    Float @default(0.00)
 
-  orderId   Int
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId Int
+  orderId   Int
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
 
   @@index([orderId])
   @@index([productId])
@@ -112,11 +116,11 @@ model OrderItem {
 model Payment {
   id     Int           @id @default(autoincrement())
   method PaymentMethod
-  amount Decimal       @default(0.00)
+  amount Float         @default(0.00)
   date   DateTime      @default(now())
 
-  orderId Int
   order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId Int   @unique
 
   @@index([orderId])
 }
@@ -126,20 +130,47 @@ model Shipping {
   address       String
   city          String
   state         String
-  postalCode    String
-  country       String
   shippedDate   DateTime?
   deliveredDate DateTime?
 
-  orderId Int
   order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId Int   @unique
 
   @@index([orderId])
 }
 
-enum Role {
-  CUSTOMER
-  VENDOR
+model Billboard {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+
+  vendor     Vendor?   @relation("VendorBillboard", fields: [vendorId], references: [id], onDelete: SetNull)
+  vendorId   Int?      @unique
+  category   Category? @relation("CategoryBillboard", fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId Int?      @unique
+  image      Image?    @relation(fields: [imageId], references: [id])
+  imageId    Int?      @unique
+  createdAt  DateTime  @default(now())
+
+  @@index([vendorId])
+  @@index([categoryId])
+}
+
+model Image {
+  id  Int    @id @default(autoincrement())
+  uri String
+
+  vendor     Vendor?    @relation("VendorImages", fields: [vendorId], references: [id], onDelete: SetNull)
+  vendorId   Int?
+  category   Category?  @relation("CategoryImages", fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId Int?
+  product    Product?   @relation("ProductImages", fields: [productId], references: [id], onDelete: SetNull)
+  productId  Int?
+  billboard  Billboard?
+
+  @@index([vendorId])
+  @@index([categoryId])
+  @@index([productId])
 }
 
 enum OrderStatus {

@@ -26,13 +26,14 @@ const createProduct = async (
                 stock,
                 images,
                 price: parseFloat(price),
-                categoryId,
-                vendorId,
+                categoryId: +categoryId,
+                vendorId: +vendorId,
             },
         });
 
         res.status(201).json({});
     } catch (err) {
+        console.log(err);
         return next(createHttpError(500, "Internal server error"));
     }
 };
@@ -48,7 +49,7 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
                 stock: true,
                 isArchived: true,
                 createdAt: true,
-                images: { select: { imageUrl: true } },
+                images: { select: { uri: true } },
             },
         });
         res.json(products);
@@ -68,7 +69,7 @@ const getProduct = async (req: Request, res: Response, next: NextFunction) => {
                 stock: true,
                 isArchived: true,
                 createdAt: true,
-                images: { select: { imageUrl: true } },
+                images: { select: { uri: true } },
             },
         });
         res.json(product);

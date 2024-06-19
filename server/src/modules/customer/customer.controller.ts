@@ -6,7 +6,11 @@ import jwt from "jsonwebtoken";
 import config from "../../config";
 import prisma from "../../config/db";
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+const registerCustomer = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         const error = createHttpError(400, "All fields are required");
@@ -14,15 +18,15 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     try {
-        const user = await prisma.user.findFirst({ where: { email } });
-        if (user) {
+        const customer = await prisma.customer.findFirst({ where: { email } });
+        if (customer) {
             return next(
-                createHttpError(400, "User already exists with this email.")
+                createHttpError(400, "Customer already exists with this email.")
             );
         }
 
         const hash = await bcrypt.hash(password, 10);
-        await prisma.user.create({
+        await prisma.customer.create({
             data: {
                 name,
                 email,
@@ -36,27 +40,31 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+const loginCustomer = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return next(createHttpError(400, "All fields are required"));
     }
 
     try {
-        const user = await prisma.user.findFirst({ where: { email } });
-        if (!user) {
-            return next(createHttpError(404, "User not found."));
+        const customer = await prisma.customer.findFirst({ where: { email } });
+        if (!customer) {
+            return next(createHttpError(404, "Customer not found."));
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, customer.password);
         if (!isMatch) {
             return next(
-                createHttpError(400, "Username or password incorrect!")
+                createHttpError(400, "Customername or password incorrect!")
             );
         }
 
         const accessToken = jwt.sign(
-            { sub: user.id },
+            { sub: customer.id },
             config.jwtSecret as string,
             {
                 expiresIn: "7d",
@@ -76,9 +84,7 @@ const getCustomers = async (
     next: NextFunction
 ) => {
     try {
-        const customers = await prisma.user.findMany({
-            where: { role: "CUSTOMER" },
-        });
+        const customers = await prisma.customer.findMany({});
 
         return res.json(customers);
     } catch (err) {
@@ -88,7 +94,7 @@ const getCustomers = async (
 const getOrders = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const customers = await prisma.order.findMany({
-            where: { userId: 1 },
+            where: { customerId: 1 },
         });
 
         return res.json(customers);
@@ -97,4 +103,4 @@ const getOrders = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-export { createUser, getCustomers, getOrders, loginUser };
+export { getCustomers, getOrders, loginCustomer, registerCustomer };

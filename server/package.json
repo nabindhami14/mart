@@ -6,9 +6,6 @@
     "scripts": {
         "dev": "nodemon server.ts"
     },
-    "prisma": {
-        "seed": "ts-node prisma/seed.ts"
-    },
     "license": "ISC",
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",

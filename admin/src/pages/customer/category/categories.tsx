@@ -1,26 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
 
 import { getCategories } from "@/api";
+import Loading from "@/components/loading";
 import { Card, CardHeader } from "@/components/ui/card";
+import { ICategory } from "@/types";
+import { Link } from "react-router-dom";
 
 const ProductPage = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories,
-    staleTime: 10000, // in Milli-seconds
   });
 
-  if (isLoading || isError) return <Loader2 />;
+  if (isLoading) return <Loading />;
+  const categories = data?.data as ICategory[];
 
-  const uniqueCategories = [...new Set(data?.data)];
+  // const uniqueCategories = [...new Set(data?.data)];
   return (
     <div>
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 my-10">
-        {uniqueCategories.splice(0, 10).map((p) => (
-          <Card key={p.id}>
-            <CardHeader>{p.name}</CardHeader>
-          </Card>
+        {categories.map((p) => (
+          <Link to={`/categories/${p.id}`} key={p.id}>
+            <Card>
+              <CardHeader>{p.name}</CardHeader>
+            </Card>
+          </Link>
         ))}
       </section>
     </div>

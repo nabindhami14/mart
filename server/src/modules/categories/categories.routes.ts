@@ -1,15 +1,17 @@
 import express from "express";
 import {
+    addBillboard,
     createCategoery,
     getCategories,
-    getProducts,
+    getCategory,
 } from "./categories.controller";
 
 const categoryRouter = express.Router();
 
-// routes
 categoryRouter.post("/", createCategoery);
 categoryRouter.get("/", getCategories);
-categoryRouter.get("/:categoryId", getProducts);
+categoryRouter.get("/:categoryId", getCategory);
+
+categoryRouter.post("/:categoryId/billboards", addBillboard);
 
 export default categoryRouter;

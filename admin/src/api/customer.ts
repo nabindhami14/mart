@@ -18,13 +18,15 @@ const api = axios.create({
 export const customerLogin = async (data: {
   email: string;
   password: string;
-}) => api.post("/api/customers/login", data);
+}) => api.post("/api/customers/auth/login", data);
 
 export const customerRegister = async (data: {
   name: string;
   email: string;
   password: string;
-}) => api.post("/api/customers/register", data);
+}) => api.post("/api/customers/auth/register", data);
 
 // ORDERS
 export const getVendors = async () => api.get("/api/vendors");
+export const getVendor = async (vendorId: number) =>
+  api.get(`/api/vendors/${vendorId}`);

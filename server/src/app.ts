@@ -3,14 +3,16 @@ import express from "express";
 
 import config from "./config";
 
-import categoriesRouter from "./modules/categories/categories.routes";
+import adminRouter from "./modules/admin/admin.routes";
 import customerRouter from "./modules/customer/customer.routes";
+import vendorRouter from "./modules/vendors/vendors.routes";
+
+import categoriesRouter from "./modules/categories/categories.routes";
+import productsRouter from "./modules/products/products.routes";
+
+import orderRouter from "./modules/orders/order.routes";
 
 import globalErrorHandler from "./middlewares/globalErrorHandler";
-import adminRouter from "./modules/admin/admin.routes";
-import orderRouter from "./modules/orders/order.routes";
-import productsRouter from "./modules/products/products.routes";
-import vendorRouter from "./modules/vendors/vendors.routes";
 
 const app = express();
 
