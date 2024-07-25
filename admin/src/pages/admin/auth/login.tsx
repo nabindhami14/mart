@@ -84,13 +84,6 @@ const AdminLoginPage = () => {
 
               <span className="ml-2">Sign in</span>
             </Button>
-
-            <div className="mt-4 text-center text-sm">
-              Don't have an account?{" "}
-              <Link to={"/admin/auth/register"} className="underline">
-                Sign up
-              </Link>
-            </div>
           </div>
         </CardFooter>
       </Card>

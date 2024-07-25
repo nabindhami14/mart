@@ -1,5 +1,14 @@
+import NewCategoryForm from "@/components/forms/new-category-form";
+import { useParams } from "react-router-dom";
+
 const VendorsNewCategoryPage = () => {
-  return <div>VendorsNewCategoryPage</div>;
+  const { vendorId } = useParams();
+
+  return (
+    <div>
+      <NewCategoryForm vendorId={vendorId!} />
+    </div>
+  );
 };
 
 export default VendorsNewCategoryPage;

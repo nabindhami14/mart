@@ -48,16 +48,6 @@ const MainLayout = () => {
             </li>
             <li>
               <NavLink
-                to="/admin/dashboard"
-                className={({ isActive, isPending }) =>
-                  isPending ? "text-blue-100" : isActive ? "text-blue-400" : ""
-                }
-              >
-                Admin
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
                 to="/categories"
                 className={({ isActive, isPending }) =>
                   isPending ? "text-blue-100" : isActive ? "text-blue-400" : ""

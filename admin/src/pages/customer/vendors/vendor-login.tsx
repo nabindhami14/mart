@@ -15,10 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { customerLogin } from "@/api/customer";
 import { useToken } from "@/contexts/access-token";
+import { vendorLogin } from "@/api/vendor";
+import { toast } from "sonner";
 
-const CustomerLogin = () => {
+const VendorLogin = () => {
   const navigate = useNavigate();
   const setToken = useToken((state) => state.setToken);
 
@@ -26,10 +27,10 @@ const CustomerLogin = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const mutation = useMutation({
-    mutationFn: customerLogin,
+    mutationFn: vendorLogin,
     onSuccess: (response) => {
       setToken(response.data.accessToken);
-      navigate("/");
+      navigate(`/vendors/${response.data.vendorId}/dashboard`);
     },
   });
 
@@ -38,7 +39,8 @@ const CustomerLogin = () => {
     const password = passwordRef.current?.value;
 
     if (!email || !password) {
-      return alert("Please enter email and password");
+      toast.error("Please enter email and password");
+      return;
     }
 
     mutation.mutate({ email, password });
@@ -86,14 +88,9 @@ const CustomerLogin = () => {
             </Button>
 
             <div className="mt-4 text-center text-sm">
-              Don't have an account?
+              Don't have an account?{" "}
               <Link to={"/auth/register"} className="underline">
                 Sign up
-              </Link>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              <Link to={"/vendors/auth/login"} className="underline">
-                Login as Vendor
               </Link>
             </div>
           </div>
@@ -103,4 +100,4 @@ const CustomerLogin = () => {
   );
 };
 
-export default CustomerLogin;
+export default VendorLogin;
