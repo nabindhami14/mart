@@ -44,6 +44,7 @@ const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "vendors", element: <VendorsPage /> },
+      { path: "vendors/new", element: <NewVendor /> },
       { path: "categories", element: <CategoriesPage /> },
       { path: "categories/:categoryId", element: <CategoryPage /> },
       { path: "checkout", element: <CheckoutPage /> },
@@ -80,7 +81,6 @@ const router = createBrowserRouter([
   {
     path: "vendors",
     children: [
-      { path: "new", element: <NewVendor /> },
       {
         path: "auth",
         element: <AdminAuthLayout />,
