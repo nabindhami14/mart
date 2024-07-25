@@ -31,6 +31,8 @@ import CategoryPage from "@/pages/customer/category/category";
 import VendorPage from "@/pages/customer/vendors/vendor";
 import VendorsPage from "@/pages/customer/vendors/vendors";
 import VendorsCategoriesPage from "@/pages/vendor/vendors-categories-page";
+import VendorsNewCategoryPage from "@/pages/vendor/vendors-new-category";
+import VendorsNewProductPage from "@/pages/vendor/vendors-new-product";
 import VendorsProductsPage from "@/pages/vendor/vendors-products-page";
 import VendorsSettingsPAge from "@/pages/vendor/vendors-settings-page";
 
@@ -98,13 +100,15 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/vendors/:vendorId",
+    path: "/vendors/:vendorId/dashboard",
     element: <VendorLayout />,
     children: [
       { path: "home", element: <VendorsHomePage /> },
       { path: "orders", element: <VendorsOrdersPage /> },
       { path: "products", element: <VendorsProductsPage /> },
+      { path: "products/new", element: <VendorsNewProductPage /> },
       { path: "categories", element: <VendorsCategoriesPage /> },
+      { path: "categories/new", element: <VendorsNewCategoryPage /> },
       { path: "settings", element: <VendorsSettingsPAge /> },
     ],
   },

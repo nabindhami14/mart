@@ -20,9 +20,11 @@ import {
   Settings,
   ShoppingBasket,
 } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 
 const VendorLayout = () => {
+  const { vendorId } = useParams();
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -33,7 +35,7 @@ const VendorLayout = () => {
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <NavLink
-                to="/vendors/1/home"
+                to={`/vendors/${vendorId}/dashboard/home`}
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -44,7 +46,7 @@ const VendorLayout = () => {
                 Home
               </NavLink>
               <NavLink
-                to="/vendors/1/products"
+                to={`/vendors/${vendorId}/dashboard/products`}
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -55,7 +57,7 @@ const VendorLayout = () => {
                 Products{" "}
               </NavLink>
               <NavLink
-                to="/vendors/1/categories"
+                to={`/vendors/${vendorId}/dashboard/categories`}
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -66,7 +68,7 @@ const VendorLayout = () => {
                 Categories{" "}
               </NavLink>
               <NavLink
-                to="/vendors/1/orders"
+                to={`/vendors/${vendorId}/dashboard/orders`}
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -77,7 +79,7 @@ const VendorLayout = () => {
                 Orders{" "}
               </NavLink>
               <NavLink
-                to="/vendors/1/settings"
+                to={`/vendors/${vendorId}/dashboard/settings`}
                 className={({ isActive }) => {
                   return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                     isActive && "bg-muted"
@@ -108,7 +110,7 @@ const VendorLayout = () => {
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
                 <NavLink
-                  to="/vendors/1/home"
+                  to={`/vendors/${vendorId}/dashboard/home`}
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -119,7 +121,7 @@ const VendorLayout = () => {
                   Home
                 </NavLink>
                 <NavLink
-                  to="/vendors/1/products"
+                  to={`/vendors/${vendorId}/dashboard/products`}
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -130,7 +132,7 @@ const VendorLayout = () => {
                   Products{" "}
                 </NavLink>
                 <NavLink
-                  to="/vendors/1/categories"
+                  to={`/vendors/${vendorId}/dashboard/categories`}
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -141,7 +143,7 @@ const VendorLayout = () => {
                   Categories{" "}
                 </NavLink>
                 <NavLink
-                  to="/vendors/1/orders"
+                  to={`/vendors/${vendorId}/dashboard/orders`}
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"
@@ -152,7 +154,7 @@ const VendorLayout = () => {
                   Orders{" "}
                 </NavLink>
                 <NavLink
-                  to="/vendors/1/settings"
+                  to={`/vendors/${vendorId}/dashboard/settings`}
                   className={({ isActive }) => {
                     return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
                       isActive && "bg-muted"

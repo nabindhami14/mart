@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 import Loading from "@/components/loading";
 
@@ -9,15 +10,18 @@ import { getVendorsProducts } from "@/api/vendor";
 import { IProduct } from "@/types";
 
 const ProductsTable = () => {
+  const { vendorId } = useParams();
+
   const { data, isLoading } = useQuery({
-    queryKey: [1, "products"],
-    queryFn: () => getVendorsProducts(1),
+    queryKey: [vendorId, "products"],
+    queryFn: () => getVendorsProducts(Number(vendorId)),
   });
 
   if (isLoading) {
     return <Loading />;
   }
   const vendors = data?.data as IProduct[];
+
   return (
     <div>
       <DataTable columns={columns} data={vendors} />
