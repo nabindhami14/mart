@@ -1,11 +1,11 @@
-import { Product } from "@/types";
+import { IProduct } from "@/types";
 
 import NoResults from "./no-result";
 import ProductCard from "./product-card";
 
 interface ProductListProps {
   title: string;
-  items: Product[];
+  items: IProduct[];
 }
 
 const ProductList: React.FC<ProductListProps> = ({ title, items }) => {

@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import morgan from "morgan";
 
 import config from "./config";
 
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 app.get("/", (req, res, next) => {
     res.json({ message: "Health Check" });

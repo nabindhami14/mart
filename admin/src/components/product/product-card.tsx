@@ -3,12 +3,12 @@
 import { ShoppingCart } from "lucide-react";
 import { MouseEventHandler } from "react";
 
-import { Product } from "@/types";
+import { IProduct } from "@/types";
 import useCart from "../hooks/use-cart";
 import IconButton from "./icon-button";
 
 interface ProductCardProps {
-  data: Product;
+  data: IProduct;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
@@ -28,7 +28,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     >
       <div className="aspect-square rounded-xl relative">
         <img
-          src={data?.images[0].imageUrl}
+          src={
+            data?.images[0]?.imageUrl ||
+            "https://images.pexels.com/photos/27001883/pexels-photo-27001883/free-photo-of-a-white-car-is-driving-down-a-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          }
           alt="Image"
           className="aspect-square object-cover rounded-md"
         />

@@ -11,6 +11,7 @@ const HomePage = () => {
   });
 
   if (isLoading || isError) return <Loader2 />;
+
   return (
     <div>
       <section className="my-10">

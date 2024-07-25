@@ -15,17 +15,6 @@ export interface Order {
   };
 }
 
-// "id": 1,
-// "name": "Kreiger - Bahringer",
-// "description": "Legacy",
-// "price": 221.82,
-// "stock": 215,
-// "isArchived": false,
-// "vendorId": 1,
-// "categoryId": 2,
-// "createdAt": "2024-06-19T16:37:20.228Z",
-// "updatedAt": "2024-06-19T16:37:20.228Z"
-
 export interface IProduct {
   id: number;
   name: string;
