@@ -169,15 +169,15 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
 };
 const getOrders = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const vendors = await prisma.vendor.findFirst({
+        const vendors = await prisma.order.findMany({
             where: {
-                id: +req.params.vendorId,
+                vendorId: parseInt(req.params.vendorId),
             },
-            select: {
-                orders: true,
+            include: {
+                customer: true,
             },
         });
-        res.json(vendors?.orders);
+        res.json(vendors);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }

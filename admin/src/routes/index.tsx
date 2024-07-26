@@ -22,6 +22,7 @@ import AdminLayout from "@/layouts/admin-layout";
 import AdminLoginPage from "@/pages/admin/auth/login";
 import Dashboard from "@/pages/admin/dashboard";
 import AdminVendorsPage from "@/pages/admin/dashboard/vendors";
+import AdminOrdersPage from "@/pages/admin/dashboard/orders";
 
 // VENDOR LAYOUT
 import VendorLayout from "@/layouts/vendor-layout";
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
         children: [
           { path: "home", element: <Dashboard /> },
           { path: "vendors", element: <AdminVendorsPage /> },
+          { path: "orders", element: <AdminOrdersPage /> },
         ],
       },
     ],

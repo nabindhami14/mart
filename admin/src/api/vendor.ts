@@ -24,6 +24,8 @@ export const getVendorCategories = async (vendorId: number) =>
   api.get(`/api/vendors/${vendorId}/categories`);
 export const getVendorsProducts = async (vendorId: number) =>
   api.get(`/api/vendors/${vendorId}/products`);
+export const getVendorOrders = async (vendorId: number) =>
+  api.get(`/api/vendors/${vendorId}/orders`);
 
 export const newCategory = async (data: { vendorId: string; name: string }) =>
   api.post(`/api/categories`, data);

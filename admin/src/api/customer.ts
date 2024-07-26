@@ -44,4 +44,4 @@ export const createOrder = async (data: {
 export const updatePayment = async (data: {
   transactionId: string;
   orderId: string;
-}) => api.patch("/orders/payment", data);
+}) => api.patch("/api/orders/payment", data);

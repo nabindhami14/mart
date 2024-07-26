@@ -25,9 +25,8 @@ const Summary = () => {
       productId: p.id,
       quantity: p.quantity,
     }));
-    const data = { amount: totalPrice, orderItems };
 
-    mutation.mutate(data);
+    mutation.mutate({ amount: totalPrice, orderItems });
   };
 
   return (

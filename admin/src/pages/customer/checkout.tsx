@@ -22,7 +22,7 @@ const CheckOutPage = () => {
               ))}
             </ul>
           </div>
-          <Summary />
+          <Summary  />
         </div>
       </div>
     </div>

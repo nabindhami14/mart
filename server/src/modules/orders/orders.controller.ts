@@ -24,12 +24,15 @@ export const createOrder = async (req: CustomRequest, res: Response) => {
         ) {
             return res.status(400).json({ error: "Invalid input data" });
         }
-
+        const product = await prisma.product.findFirst({
+            where: { id: parseInt(orderItems[0].productId) },
+        });
         // Create order
         const order = await prisma.order.create({
             data: {
                 amount,
                 customer: { connect: { id: customerId } },
+                vendor: { connect: { id: product?.vendorId } },
                 orderItems: {
                     create: orderItems.map(
                         (item: { productId: string; quantity: number }) => ({
@@ -79,26 +82,9 @@ export const createOrder = async (req: CustomRequest, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
     try {
         const orders = await prisma.order.findMany({
-            select: {
-                id: true,
-                status: true,
-                amount: true,
-                createdAt: true,
-                orderItems: {
-                    select: {
-                        product: {
-                            select: {
-                                name: true,
-                            },
-                        },
-                        quantity: true,
-                    },
-                },
-                payment: {
-                    select: {
-                        method: true,
-                    },
-                },
+            include: {
+                customer: true,
+                vendor: true,
             },
         });
         res.status(200).json(orders);
@@ -185,8 +171,6 @@ export const updatePayment = async (req: Request, res: Response) => {
 
         return res.status(200).json({});
     } catch (error) {
-        return res
-            .status(500)
-            .json({ error: "Error while updating payment." });
+        return res.status(500).json({ error: "Error while updating payment." });
     }
 };

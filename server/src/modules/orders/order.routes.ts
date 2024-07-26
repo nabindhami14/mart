@@ -19,6 +19,6 @@ orderRouter.get("/:id", getOrderById);
 orderRouter.put("/:id", updateOrder);
 orderRouter.delete("/:id", deleteOrder);
 
-orderRouter.delete("/payment", authenticate, updatePayment);
+orderRouter.patch("/payment", authenticate, updatePayment);
 
 export default orderRouter;

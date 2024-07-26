@@ -5,6 +5,7 @@ import {
   Menu,
   Search,
   ShoppingBasket,
+  Table,
 } from "lucide-react";
 import { Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
 
@@ -62,7 +63,18 @@ const AdminLayout = () => {
                 }}
               >
                 <ShoppingBasket className="h-4 w-4" />
-                Vendors{" "}
+                Vendors
+              </NavLink>
+              <NavLink
+                to="/admin/dashboard/orders"
+                className={({ isActive }) => {
+                  return `flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
+                    isActive && "bg-muted"
+                  }`;
+                }}
+              >
+                <Table className="h-4 w-4" />
+                Orders
               </NavLink>
             </nav>
           </div>
