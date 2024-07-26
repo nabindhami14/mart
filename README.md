@@ -37,3 +37,7 @@ http://localhost:5173/vendors/new
 ```sh
 http://localhost:5173/vendors/auth/login
 ```
+
+```sh
+/admin/auth/login
+```

@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { Product } from "@/types";
+import { IProduct } from "@/types";
 import toast from "react-hot-toast";
 
 interface CartStore {
-  items: Product[];
-  addItem: (data: Product) => void;
+  items: IProduct[];
+  addItem: (data: IProduct) => void;
+  decreaseItem: (id: number) => void;
   removeItem: (id: number) => void;
   removeAll: () => void;
 }
@@ -15,7 +16,7 @@ const useCart = create(
   persist<CartStore>(
     (set, get) => ({
       items: [],
-      addItem: (data: Product) => {
+      addItem: (data: IProduct) => {
         const currentItems = get().items;
         const existingItem = currentItems.find((item) => item.id === data.id);
 
@@ -33,6 +34,24 @@ const useCart = create(
             items: [...currentItems, { ...data, quantity: data.quantity || 1 }],
           });
           toast.success("Item added to cart.");
+        }
+      },
+      decreaseItem: (id: number) => {
+        const currentItems = get().items;
+        const existingItem = currentItems.find((item) => item.id === id);
+
+        if (existingItem && existingItem.quantity > 1) {
+          set({
+            items: currentItems.map((item) =>
+              item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+            ),
+          });
+          toast.success("Item quantity decreased.");
+        } else if (existingItem && existingItem.quantity === 1) {
+          set({
+            items: currentItems.filter((item) => item.id !== id),
+          });
+          toast.success("Item removed from the cart.");
         }
       },
       removeItem: (id: number) => {

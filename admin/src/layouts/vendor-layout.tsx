@@ -4,11 +4,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useToken } from "@/contexts/access-token";
 
 import {
   BookMarked,
@@ -20,10 +20,27 @@ import {
   Settings,
   ShoppingBasket,
 } from "lucide-react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import {
+  Navigate,
+  NavLink,
+  Outlet,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 const VendorLayout = () => {
+  const navigate = useNavigate();
   const { vendorId } = useParams();
+  const { token, setToken } = useToken();
+
+  if (!token) {
+    return <Navigate to={"/vendors/auth/login"} replace />;
+  }
+
+  const handleLogout = () => {
+    setToken("");
+    navigate("/vendors/auth/login");
+  };
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -87,7 +104,7 @@ const VendorLayout = () => {
                 }}
               >
                 <Settings className="h-4 w-4" />
-                Settings{" "}
+                Settings
               </NavLink>
             </nav>
           </div>
@@ -189,8 +206,7 @@ const VendorLayout = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

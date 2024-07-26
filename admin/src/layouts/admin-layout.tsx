@@ -6,7 +6,7 @@ import {
   Search,
   ShoppingBasket,
 } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useToken } from "@/contexts/access-token";
 
 const AdminLayout = () => {
+  const { token, setToken } = useToken();
+  const navigate = useNavigate();
+
+  if (!token) {
+    return <Navigate to={"/admin/auth/login"} replace />;
+  }
+  const handleLogout = () => {
+    setToken("");
+    navigate("/admin/auth/login");
+  };
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -120,7 +132,7 @@ const AdminLayout = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

@@ -5,9 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
 
 import ThemeProvider from "@/contexts/theme-provider";
-import { Toaster } from "@/components/ui/sonner"
 import router from "@/routes";
 import "@/index.css";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 

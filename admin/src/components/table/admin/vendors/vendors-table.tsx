@@ -10,7 +10,7 @@ import { IVendor } from "@/types";
 
 const VendorsTable = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ["vendors"],
     queryFn: getAllVendors,
   });
 

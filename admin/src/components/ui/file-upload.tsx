@@ -19,7 +19,7 @@ import {
   FileRejection,
   DropzoneOptions,
 } from "react-dropzone";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 import { Trash2 as RemoveIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 

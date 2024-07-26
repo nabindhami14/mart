@@ -22,9 +22,7 @@ export interface IProduct {
   price: number;
   stock: number;
   isArchived: boolean;
-  images: {
-    imageUrl: string;
-  }[];
+  images: string;
   quantity: number;
 
   vendorId: number;

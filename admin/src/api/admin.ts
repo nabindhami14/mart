@@ -12,12 +12,6 @@ const api = axios.create({
 export const adminLogin = async (data: { email: string; password: string }) =>
   api.post("/auth/login", data);
 
-export const adminRegister = async (data: {
-  name: string;
-  email: string;
-  password: string;
-}) => api.post("/auth/register", data);
-
 export const getAllVendors = async () => api.get("/vendors");
 
 export const verifyVendor = async (vendorId: number) =>

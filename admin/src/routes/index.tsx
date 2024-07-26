@@ -20,7 +20,7 @@ import AuthLayout from "@/layouts/auth-layout";
 import AdminLayout from "@/layouts/admin-layout";
 import AdminLoginPage from "@/pages/admin/auth/login";
 import Dashboard from "@/pages/admin/dashboard";
-import AdminVendorsPage from "@/pages/admin/dashboard/billboards";
+import AdminVendorsPage from "@/pages/admin/dashboard/vendors";
 
 // VENDOR LAYOUT
 import VendorLayout from "@/layouts/vendor-layout";

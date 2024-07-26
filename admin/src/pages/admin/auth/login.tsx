@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,10 @@ const AdminLoginPage = () => {
     mutationFn: adminLogin,
     onSuccess: (response) => {
       setToken(response.data.accessToken);
-      navigate("/");
+      navigate("/admin/dashboard/home");
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
 
@@ -50,11 +54,6 @@ const AdminLoginPage = () => {
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
             Enter your email below to login to your account. <br />
-            {mutation.isError && (
-              <span className="text-red-500 text-sm">
-                {"Something went wrong"}
-              </span>
-            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">

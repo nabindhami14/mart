@@ -47,3 +47,5 @@ export const getProduct = async (id: number) => api.get(`/api/products/${id}`);
 
 // ADMIN OVERVIEW
 export const getOverview = async () => api.get("/api/admins/overview");
+
+export const IMAGE_URL = `http://localhost:4000/public`;

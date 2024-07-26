@@ -1,11 +1,5 @@
-import VendorsTable from "@/components/table/admin/vendors/vendors-table";
-
-const AdminVendorsPage = () => {
-  return (
-    <div>
-      <VendorsTable />
-    </div>
-  );
+const BillboardPage = () => {
+  return <div>BillboardPage</div>;
 };
 
-export default AdminVendorsPage;
+export default BillboardPage;

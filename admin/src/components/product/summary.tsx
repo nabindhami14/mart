@@ -4,19 +4,7 @@ import { Button } from "@/components/ui/button";
 import useCart from "../hooks/use-cart";
 
 const Summary = () => {
-  const items = useCart((state) => state.items);
-  //   const removeAll = useCart((state) => state.removeAll);
-
-  //   useEffect(() => {
-  //     if (searchParams.get("success")) {
-  //       toast.success("Payment completed.");
-  //       removeAll();
-  //     }
-
-  //     if (searchParams.get("canceled")) {
-  //       toast.error("Something went wrong.");
-  //     }
-  //   }, [searchParams, removeAll]);
+  const { items } = useCart();
 
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.price) * item.quantity || 1;
@@ -34,7 +22,7 @@ const Summary = () => {
           >
             <div className="flex flex-col text-sm font-light titems-center">
               <span className="font-semibold">{item.name}</span>
-              <div className="text-xs">{item.stock}</div>
+              <div className="text-xs">Total Items: {item.quantity}</div>
             </div>
 
             <div className="font-semibold">NRS {item.price}</div>

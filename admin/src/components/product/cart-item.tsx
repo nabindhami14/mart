@@ -1,11 +1,12 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
-import { Product } from "@/types";
+import { IProduct } from "@/types";
 import useCart from "../hooks/use-cart";
 import IconButton from "./icon-button";
+import { IMAGE_URL } from "@/api";
 
 interface CartItemProps {
-  data: Product;
+  data: IProduct;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
@@ -13,11 +14,10 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
 
   return (
     <li className="flex py-6 border-b">
-      {/* Product info - Image -> Name -> Color -> Size */}
       <div className="relative w-24 h-24 overflow-hidden rounded-md sm:h-48 sm:w-48">
         <img
-          src={data.images[0].imageUrl}
-          alt=""
+          src={`${IMAGE_URL}/${JSON.parse(data.images)[1]}`}
+          alt="product"
           className="object-cover object-center"
         />
       </div>
@@ -49,25 +49,20 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
                 aria-label="Increase quantity"
               />
               <IconButton
+                onClick={() => cart.decreaseItem(data.id)}
+                icon={<Minus size={15} />}
+                aria-label="Decrease quantity"
+              />
+              <IconButton
                 onClick={() => cart.removeItem(data.id)}
                 icon={<Trash2 size={15} />}
-                aria-label="Remove item"
-                className="ml-4"
+                aria-label="Decrease quantity"
               />
             </div>
           </div>
         </div>
         <div className="flex items-end justify-between">
-          <div className="flex items-center gap-x-2">
-            {/* <IconButton
-              onClick={() =>
-                cart.decreaseItem(data.id)
-              }
-              icon={<ChevronDown size={15} />}
-              aria-label="Decrease quantity"
-            /> */}
-            {/* <p className="mx-2">{data.quantity}</p> */}
-          </div>
+          <div className="flex items-center gap-x-2"></div>
           <div className="font-semibold">NRS {data.price}</div>
         </div>
       </div>

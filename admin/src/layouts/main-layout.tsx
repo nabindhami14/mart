@@ -9,6 +9,11 @@ const MainLayout = () => {
   const { items } = useCart();
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    setToken("");
+    navigate("/");
+  };
+
   return (
     <div className="flex flex-col min-h-screen container">
       <nav className="h-16 border-b flex items-center justify-between">
@@ -58,7 +63,7 @@ const MainLayout = () => {
             </li>
             {token ? (
               <li>
-                <Button variant="link" onClick={() => setToken("")}>
+                <Button variant="link" onClick={handleLogout}>
                   Logout
                 </Button>
               </li>

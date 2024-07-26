@@ -1,7 +1,47 @@
-import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import { NextFunction, Request, Response } from "express";
+import createHttpError from "http-errors";
+import jwt from "jsonwebtoken";
 
 import prisma from "../../config/db";
+import config from "../../config";
 
+export const loginAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return next(createHttpError(400, "All fields are required"));
+    }
+
+    try {
+        const admin = await prisma.admin.findFirst({ where: { email } });
+        if (!admin) {
+            return next(createHttpError(404, "admin not found."));
+        }
+
+        if (password !== admin.password) {
+            return next(
+                createHttpError(400, "admin email or password incorrect!")
+            );
+        }
+
+        const accessToken = jwt.sign(
+            { sub: admin.id },
+            config.jwtSecret as string,
+            {
+                expiresIn: "7d",
+                algorithm: "HS256",
+            }
+        );
+
+        res.json({ accessToken });
+    } catch (err) {
+        return next(createHttpError(500, "Internal server error"));
+    }
+};
 export const getOverview = async (req: Request, res: Response) => {
     try {
         const usersCount = await prisma.customer.count({});

@@ -60,6 +60,7 @@ CREATE TABLE `Product` (
     `isArchived` BOOLEAN NOT NULL DEFAULT false,
     `vendorId` INTEGER NOT NULL,
     `categoryId` INTEGER NOT NULL,
+    `images` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -146,11 +147,9 @@ CREATE TABLE `Image` (
     `uri` VARCHAR(191) NOT NULL,
     `vendorId` INTEGER NULL,
     `categoryId` INTEGER NULL,
-    `productId` INTEGER NULL,
 
     INDEX `Image_vendorId_idx`(`vendorId`),
     INDEX `Image_categoryId_idx`(`categoryId`),
-    INDEX `Image_productId_idx`(`productId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -195,6 +194,3 @@ ALTER TABLE `Image` ADD CONSTRAINT `Image_vendorId_fkey` FOREIGN KEY (`vendorId`
 
 -- AddForeignKey
 ALTER TABLE `Image` ADD CONSTRAINT `Image_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Image` ADD CONSTRAINT `Image_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

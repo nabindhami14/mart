@@ -14,6 +14,7 @@ import productsRouter from "./modules/products/products.routes";
 import orderRouter from "./modules/orders/order.routes";
 
 import globalErrorHandler from "./middlewares/globalErrorHandler";
+import path from "node:path";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use("/public", express.static(path.join(__dirname, "..", "public")));
 
 app.get("/", (req, res, next) => {
     res.json({ message: "Health Check" });

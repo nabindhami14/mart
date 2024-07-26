@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
+import toast from "react-hot-toast";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -31,6 +32,9 @@ const CustomerLogin = () => {
       setToken(response.data.accessToken);
       navigate("/");
     },
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
+    },
   });
 
   const handleLoginSubmit = () => {
@@ -50,11 +54,6 @@ const CustomerLogin = () => {
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
             Enter your email below to login to your account. <br />
-            {mutation.isError && (
-              <span className="text-red-500 text-sm">
-                {"Something went wrong"}
-              </span>
-            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -84,11 +83,15 @@ const CustomerLogin = () => {
 
               <span className="ml-2">Sign in</span>
             </Button>
-
             <div className="mt-4 text-center text-sm">
               Don't have an account?
               <Link to={"/auth/register"} className="underline">
                 Sign up
+              </Link>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              <Link to={"/vendors/new"} className="underline">
+                Sign up as Vendor
               </Link>
             </div>
             <div className="mt-4 text-center text-sm">

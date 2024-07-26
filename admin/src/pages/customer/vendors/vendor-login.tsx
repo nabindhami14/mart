@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
+import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,6 @@ import { Label } from "@/components/ui/label";
 
 import { vendorLogin } from "@/api/vendor";
 import { useToken } from "@/contexts/access-token";
-import { toast } from "sonner";
 
 const VendorLogin = () => {
   const navigate = useNavigate();
@@ -30,7 +30,10 @@ const VendorLogin = () => {
     mutationFn: vendorLogin,
     onSuccess: (response) => {
       setToken(response.data.accessToken);
-      navigate(`/vendors/${response.data.vendorId}/dashboard`);
+      navigate(`/vendors/${response.data.vendorId}/dashboard/home`);
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
 
@@ -52,11 +55,6 @@ const VendorLogin = () => {
           <CardTitle className="text-2xl">Login as Vendor</CardTitle>
           <CardDescription>
             Enter your email below to login to your dashboard. <br />
-            {mutation.isError && (
-              <span className="text-red-500 text-sm">
-                {"Something went wrong"}
-              </span>
-            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -88,8 +86,8 @@ const VendorLogin = () => {
             </Button>
 
             <div className="mt-4 text-center text-sm">
-              Don't have an account?{" "}
-              <Link to={"/auth/register"} className="underline">
+              Register for new Vendor{" "}
+              <Link to={"/vendors/new"} className="underline">
                 Sign up
               </Link>
             </div>

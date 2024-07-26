@@ -63,6 +63,9 @@ const loginVendor = async (req: Request, res: Response, next: NextFunction) => {
                 createHttpError(400, "Username or password incorrect!")
             );
         }
+        if (!vendor.isVerified) {
+            return next(createHttpError(400, "Vendor is not verified yet"));
+        }
 
         const accessToken = jwt.sign(
             { sub: vendor.id },
@@ -113,7 +116,9 @@ const addBillboard = async (
 
 const getVendors = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const vendors = await prisma.vendor.findMany({});
+        const vendors = await prisma.vendor.findMany({
+            where: { isVerified: true },
+        });
         res.json(vendors);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
@@ -186,7 +191,6 @@ const getCategories = async (
         const vendors = await prisma.vendor.findFirst({
             where: {
                 id: +req.params.vendorId,
-                isVerified: true,
             },
             include: {
                 categories: {
