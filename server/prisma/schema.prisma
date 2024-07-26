@@ -21,6 +21,7 @@ model Customer {
   isActive Boolean @default(true)
 
   orders Order[]
+  payments Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -84,8 +85,8 @@ model Product {
 
 model Order {
   id          Int         @id @default(autoincrement())
-  totalAmount Float       @default(0.00)
-  status      OrderStatus
+  amount Float       @default(0.00)
+  status      OrderStatus @default(PENDING)
 
   customerId Int
   customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
@@ -102,7 +103,6 @@ model Order {
 model OrderItem {
   id       Int   @id @default(autoincrement())
   quantity Int
-  price    Float @default(0.00)
 
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId   Int
@@ -115,12 +115,19 @@ model OrderItem {
 
 model Payment {
   id     Int           @id @default(autoincrement())
-  method PaymentMethod
+  method PaymentMethod @default(ONLINE)
+  pidx       String
+  transactionId       String?
+  payment_url       String
+  status  PaymentStatus @default(PENDING)
+  provider PaymentProvider @default(KHALTI)
   amount Float         @default(0.00)
   date   DateTime      @default(now())
 
   order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId Int   @unique
+  customerId Int
+  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
 }
@@ -177,8 +184,17 @@ enum OrderStatus {
   DELIVERED
   CANCELLED
 }
+enum PaymentStatus {
+  PENDING
+  FAILED
+  SUCCESS
+}
 
 enum PaymentMethod {
   ONLINE
   DELIVERY
+}
+enum PaymentProvider {
+  KHALTI
+  ESEWA
 }

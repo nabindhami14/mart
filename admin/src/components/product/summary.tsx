@@ -1,14 +1,34 @@
-"use client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import useCart from "../hooks/use-cart";
+import { createOrder } from "@/api/customer";
 
 const Summary = () => {
   const { items } = useCart();
+  const queryClient = useQueryClient();
 
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.price) * item.quantity || 1;
   }, 0);
+
+  const mutation = useMutation({
+    mutationFn: createOrder,
+    onSuccess: (data) => {
+      window.location.href = data.data.paymentUrl;
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
+
+  const handleCheckout = () => {
+    const orderItems = items.map((p) => ({
+      productId: p.id,
+      quantity: p.quantity,
+    }));
+    const data = { amount: totalPrice, orderItems };
+
+    mutation.mutate(data);
+  };
 
   return (
     <div className="px-4 py-6 mt-16 rounded-lg sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
@@ -34,7 +54,7 @@ const Summary = () => {
         </div>
       </div>
       <Button
-        onClick={() => {}}
+        onClick={handleCheckout}
         disabled={items.length === 0}
         className="w-full mt-6"
       >

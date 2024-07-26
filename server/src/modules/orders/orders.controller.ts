@@ -1,36 +1,78 @@
 import { Request, Response } from "express";
+
 import prisma from "../../config/db";
+import { initializeKhaltiPayment } from "../../config/khalti";
 
-export const createOrder = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+    userId?: string;
+}
+
+export const createOrder = async (req: CustomRequest, res: Response) => {
+    const customerId = parseInt(req.userId!);
+
+    if (isNaN(customerId)) {
+        return res.status(400).json({ error: "Invalid customer ID" });
+    }
+
     try {
-        const {
-            totalAmount,
-            status,
-            customerId,
-            orderItems,
-            payments,
-            shippings,
-        } = req.body;
+        const { amount, orderItems } = req.body;
 
+        if (
+            typeof amount !== "number" ||
+            !Array.isArray(orderItems) ||
+            orderItems.length === 0
+        ) {
+            return res.status(400).json({ error: "Invalid input data" });
+        }
+
+        // Create order
         const order = await prisma.order.create({
             data: {
-                totalAmount,
-                status,
+                amount,
                 customer: { connect: { id: customerId } },
                 orderItems: {
-                    create: orderItems,
-                },
-                payment: {
-                    create: payments,
-                },
-                shipping: {
-                    create: shippings,
+                    create: orderItems.map(
+                        (item: { productId: string; quantity: number }) => ({
+                            product: {
+                                connect: { id: parseInt(item.productId, 10) },
+                            },
+                            quantity: item.quantity, // Ensure quantity is a number
+                        })
+                    ),
                 },
             },
         });
-        res.status(201).json(order);
-    } catch (error) {
-        res.status(500).json({ error: "Failed to create order" });
+
+        // Initialize Khalti payment
+        const data = await initializeKhaltiPayment({
+            amount: amount * 100, // Convert to paisa
+            purchase_order_id: order.id,
+            purchase_order_name: customerId.toString(),
+            return_url: `http://localhost:5173/shipping`,
+            website_url: `http://localhost:5473`,
+        });
+
+        // Create payment record
+        const payment = await prisma.payment.create({
+            data: {
+                amount,
+                pidx: data.pidx,
+                payment_url: data.payment_url,
+                order: { connect: { id: order.id } },
+                customer: { connect: { id: customerId } },
+            },
+        });
+
+        res.status(201).json({
+            paymentUrl: data.payment_url,
+            paymentId: payment.id,
+        });
+    } catch (error: any) {
+        console.error("Error creating order:", error.message || error);
+        res.status(500).json({
+            error: "Failed to create order",
+            details: error.message || error,
+        });
     }
 };
 
@@ -40,7 +82,7 @@ export const getOrders = async (req: Request, res: Response) => {
             select: {
                 id: true,
                 status: true,
-                totalAmount: true,
+                amount: true,
                 createdAt: true,
                 orderItems: {
                     select: {
@@ -50,7 +92,6 @@ export const getOrders = async (req: Request, res: Response) => {
                             },
                         },
                         quantity: true,
-                        price: true,
                     },
                 },
                 payment: {
@@ -84,19 +125,13 @@ export const getOrderById = async (req: Request, res: Response) => {
 export const updateOrder = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        const {
-            totalAmount,
-            status,
-            customerId,
-            orderItems,
-            payments,
-            shippings,
-        } = req.body;
+        const { amount, status, customerId, orderItems, payments, shippings } =
+            req.body;
 
         const order = await prisma.order.update({
             where: { id: parseInt(id) },
             data: {
-                totalAmount,
+                amount,
                 status,
                 customer: { connect: { id: customerId } },
                 orderItems: {
@@ -127,5 +162,31 @@ export const deleteOrder = async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Failed to delete order" });
+    }
+};
+
+export const updatePayment = async (req: Request, res: Response) => {
+    const { transactionId, orderId } = req.body;
+
+    try {
+        await prisma.payment.update({
+            where: { orderId: parseInt(orderId) },
+            data: {
+                status: "SUCCESS",
+                transactionId: transactionId,
+            },
+        });
+        await prisma.order.update({
+            where: { id: parseInt(orderId) },
+            data: {
+                status: "SHIPPED",
+            },
+        });
+
+        return res.status(200).json({});
+    } catch (error) {
+        return res
+            .status(500)
+            .json({ error: "Error while updating payment." });
     }
 };

@@ -6,15 +6,19 @@ import {
     getOrderById,
     getOrders,
     updateOrder,
+    updatePayment,
 } from "./orders.controller";
+import authenticate from "../../middlewares/authenticate";
 
 const orderRouter = express.Router();
 
-orderRouter.post("/", createOrder);
+orderRouter.post("/", authenticate, createOrder);
 orderRouter.get("/", getOrders);
 
 orderRouter.get("/:id", getOrderById);
 orderRouter.put("/:id", updateOrder);
 orderRouter.delete("/:id", deleteOrder);
+
+orderRouter.delete("/payment", authenticate, updatePayment);
 
 export default orderRouter;

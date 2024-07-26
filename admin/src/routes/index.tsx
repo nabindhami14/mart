@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "@/layouts/main-layout";
 import CustomerLogin from "@/pages/customer/auth/login";
 import CustomerRegister from "@/pages/customer/auth/register";
+import ShippingPage from "@/pages/customer/shipping";
 import CategoriesPage from "@/pages/customer/category/categories";
 import CategoryPage from "@/pages/customer/category/category";
 import CheckoutPage from "@/pages/customer/checkout";
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: "categories", element: <CategoriesPage /> },
       { path: "categories/:categoryId", element: <CategoryPage /> },
       { path: "checkout", element: <CheckoutPage /> },
+      { path: "shipping", element: <ShippingPage /> },
       {
         path: "auth",
         element: <AuthLayout />,
