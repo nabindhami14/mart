@@ -1,12 +1,8 @@
-import { useToken } from "@/contexts/access-token";
-import { Navigate, Outlet } from "react-router-dom";
+// import { useToken } from "@/contexts/access-token";
+import { Outlet } from "react-router-dom";
 
 const AdminAuthLayout = () => {
-  const token = useToken((state) => state.token);
-
-  if (token) {
-    return <Navigate to={"/admin/dashboard"} replace />;
-  }
+  // const token = useToken((state) => state.token);
 
   return (
     <>

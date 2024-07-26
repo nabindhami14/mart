@@ -24,3 +24,19 @@ export const getAllVendors = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to delete order" });
     }
 };
+
+export const verifyVendor = async (req: Request, res: Response) => {
+    try {
+        await prisma.vendor.update({
+            where: { id: +req.params.vendorId },
+            data: {
+                isVerified: true,
+            },
+        });
+
+        res.status(200).json({});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Failed to verify vendor" });
+    }
+};

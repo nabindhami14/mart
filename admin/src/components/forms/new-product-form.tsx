@@ -1,10 +1,16 @@
-import { useForm } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ImageUp, Loader2 } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  FileInput,
+  FileUploader,
+  FileUploaderContent,
+  FileUploaderItem,
+} from "@/components/ui/file-upload";
 import {
   Form,
   FormControl,
@@ -13,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,29 +27,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  FileUploader,
-  FileInput,
-  FileUploaderContent,
-  FileUploaderItem,
-} from "@/components/ui/file-upload";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 
+import { getCategories } from "@/api";
 import { newProduct } from "@/api/vendor";
-
-const categories = [
-  {
-    id: 1,
-    name: "Fruits",
-  },
-  {
-    id: 2,
-    name: "Vegetables",
-  },
-];
+import Loading from "../loading";
 
 // name, description, images, price, stock, categoryId, vendorId
 const formSchema = z.object({
@@ -62,6 +53,11 @@ const formSchema = z.object({
 const NewProductForm = ({ vendorId }: { vendorId: string }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
 
   const mutation = useMutation({
     mutationFn: newProduct,
@@ -98,8 +94,10 @@ const NewProductForm = ({ vendorId }: { vendorId: string }) => {
       values.images.forEach((file) => data.append("images", file));
     }
 
-    mutation.mutate({ vendorId, data });
+    mutation.mutate(data);
   }
+
+  if (isLoading) return <Loading />;
 
   return (
     <Form {...form}>
@@ -176,7 +174,7 @@ const NewProductForm = ({ vendorId }: { vendorId: string }) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {categories.map((c) => (
+                  {data?.data.map((c) => (
                     <SelectItem value={String(c.id)}>{c.name}</SelectItem>
                   ))}
                 </SelectContent>

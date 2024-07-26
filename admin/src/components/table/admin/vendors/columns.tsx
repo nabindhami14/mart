@@ -1,14 +1,9 @@
 import { IVendor } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  Check,
-  CrossIcon,
-  DoorOpen,
-  MoreHorizontal,
-  Trash,
-} from "lucide-react";
-import { Badge } from "../../../ui/badge";
+import { DoorOpen, MoreHorizontal, Trash } from "lucide-react";
 
+import VerifyVendorDialog from "@/components/dialog/verify-vendor-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +23,14 @@ export const columns: ColumnDef<IVendor>[] = [
     header: "Name",
   },
   {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "phone",
+    header: "Phone",
+  },
+  {
     accessorKey: "location",
     header: "Location",
   },
@@ -40,6 +43,13 @@ export const columns: ColumnDef<IVendor>[] = [
           {row.original.isVerified ? "VERIFIED" : "NOT VERIFIED"}
         </Badge>
       );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Registration",
+    cell: ({ row }) => {
+      return <p>{new Date(row.original.createdAt).toLocaleDateString()}</p>;
     },
   },
   {
@@ -60,12 +70,10 @@ export const columns: ColumnDef<IVendor>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              {row.original.isVerified ? (
-                <Check className="w-4 h-4 mr-2" />
-              ) : (
-                <CrossIcon className="w-4 h-4 mr-2" />
-              )}
-              {row.original.isVerified ? "NOT VERIFY" : "VERIFY"}
+              <VerifyVendorDialog
+                vendorId={row.original.id}
+                isVerified={row.original.isVerified}
+              ></VerifyVendorDialog>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Trash className="w-4 h-4 mr-2" />

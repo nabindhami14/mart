@@ -73,7 +73,7 @@ const loginVendor = async (req: Request, res: Response, next: NextFunction) => {
             }
         );
 
-        res.json({ accessToken });
+        res.json({ accessToken, vendorId: vendor.id });
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }
@@ -186,13 +186,16 @@ const getCategories = async (
         const vendors = await prisma.vendor.findFirst({
             where: {
                 id: +req.params.vendorId,
+                isVerified: true,
             },
-            select: {
+            include: {
                 categories: {
-                    include: {
-                        billboard: {
-                            include: {
-                                image: true,
+                    select: {
+                        id: true,
+                        name: true,
+                        vendor: {
+                            select: {
+                                name: true,
                             },
                         },
                     },

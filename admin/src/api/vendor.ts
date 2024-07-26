@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL:
-    import.meta.env.VITE_PUBLIC_BACKEND_URL ||
-    "http://localhost:4000/api/vendors",
+  baseURL: import.meta.env.VITE_PUBLIC_BACKEND_URL || "http://localhost:4000",
   headers: {
     "Content-Type": "application/json",
   },
@@ -17,23 +15,22 @@ export const registerVendor = async (data: {
   description: string;
   phone: string;
   location: string;
-}) => api.post("/api/vendors", data);
+}) => api.post("/api/vendors/auth/register", data);
 
 export const vendorLogin = async (data: { email: string; password: string }) =>
-  api.post("/api/vendor/login", data);
+  api.post("/api/vendors/auth/login", data);
 
 export const getVendorCategories = async (vendorId: number) =>
-  api.get(`/${vendorId}/categories`);
+  api.get(`/api/vendors/${vendorId}/categories`);
 export const getVendorsProducts = async (vendorId: number) =>
-  api.get(`/${vendorId}/products`);
+  api.get(`/api/vendors/${vendorId}/products`);
 
 export const newCategory = async (data: { vendorId: string; name: string }) =>
-  api.post(`/categories`, data);
+  api.post(`/api/categories`, data);
 
-export const newProduct = async ({
-  vendorId,
-  data,
-}: {
-  vendorId: string;
-  data: FormData;
-}) => api.post(`/${vendorId}/products`, data);
+export const newProduct = async (data: FormData) =>
+  api.post(`/api/products`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

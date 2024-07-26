@@ -72,7 +72,7 @@ model Product {
   vendor     Vendor      @relation(fields: [vendorId], references: [id], onDelete: Cascade)
   categoryId Int
   category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  images     Image[]     @relation("ProductImages")
+  images     String
   orderItems OrderItem[]
 
   createdAt DateTime @default(now())
@@ -164,13 +164,10 @@ model Image {
   vendorId   Int?
   category   Category?  @relation("CategoryImages", fields: [categoryId], references: [id], onDelete: SetNull)
   categoryId Int?
-  product    Product?   @relation("ProductImages", fields: [productId], references: [id], onDelete: SetNull)
-  productId  Int?
   billboard  Billboard?
 
   @@index([vendorId])
   @@index([categoryId])
-  @@index([productId])
 }
 
 enum OrderStatus {

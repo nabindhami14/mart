@@ -19,3 +19,6 @@ export const adminRegister = async (data: {
 }) => api.post("/auth/register", data);
 
 export const getAllVendors = async () => api.get("/vendors");
+
+export const verifyVendor = async (vendorId: number) =>
+  api.patch(`/vendors/verify/${vendorId}`);

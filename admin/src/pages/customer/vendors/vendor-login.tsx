@@ -15,8 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useToken } from "@/contexts/access-token";
 import { vendorLogin } from "@/api/vendor";
+import { useToken } from "@/contexts/access-token";
 import { toast } from "sonner";
 
 const VendorLogin = () => {
@@ -49,9 +49,9 @@ const VendorLogin = () => {
     <section className="flex justify-center items-center h-screen">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Login as Vendor</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account. <br />
+            Enter your email below to login to your dashboard. <br />
             {mutation.isError && (
               <span className="text-red-500 text-sm">
                 {"Something went wrong"}

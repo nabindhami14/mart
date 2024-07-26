@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
-import { Loader2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -37,7 +37,7 @@ const formSchema = z.object({
   phone: z.string().length(10, {
     message: "Must be a valid phone number.",
   }),
-  location: z.string().min(10, {
+  location: z.string().min(4, {
     message: "Must be a valid address.",
   }),
 });
@@ -50,7 +50,7 @@ const NewVendorForm = () => {
     mutationFn: registerVendor,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vendors"] });
-      navigate(`/vendors`);
+      navigate(`/vendors/auth/login`);
     },
   });
   const form = useForm<z.infer<typeof formSchema>>({
@@ -160,7 +160,6 @@ const NewVendorForm = () => {
           )}
         />
 
-        
         <Button type="submit" disabled={mutation.isPending}>
           {mutation.isPending && (
             <Loader2 className="animate-spin w-5 h-5 mr-2" />

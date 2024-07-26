@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
-import { Loader2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -18,11 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { newCategory } from "@/api/vendor";
 
-// name, description, images, price, stock, categoryId, vendorId
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "name must be at least 2 characters.",
+  name: z.string().min(5, {
+    message: "name must be at least 5 characters.",
   }),
+  vendorId: z.string(),
 });
 
 const NewCategoryForm = ({ vendorId }: { vendorId: string }) => {
@@ -41,11 +41,12 @@ const NewCategoryForm = ({ vendorId }: { vendorId: string }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      vendorId,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutation.mutate({ vendorId, name: values.name });
+    mutation.mutate(values);
   }
 
   return (

@@ -21,12 +21,8 @@ export const columns: ColumnDef<ICategory>[] = [
     header: "Name",
   },
   {
-    accessorKey: "billboard.title",
-    header: "Billboard Title",
-  },
-  {
-    accessorKey: "billboard.description",
-    header: "Billboard Description",
+    accessorKey: "vendor.name",
+    header: "Vendor",
   },
 
   {

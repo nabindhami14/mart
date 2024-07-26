@@ -8,8 +8,10 @@ const createProduct = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { name, description, images, price, stock, categoryId, vendorId } =
-        req.body;
+    const { name, description, price, stock, categoryId, vendorId } = req.body;
+
+    // @ts-ignore
+    const images = req.files && req.files.map((file) => file.filename);
 
     try {
         const product = await prisma.product.findFirst({ where: { name } });
@@ -23,11 +25,11 @@ const createProduct = async (
             data: {
                 name,
                 description,
-                stock,
-                images,
+                stock: parseInt(stock),
                 price: parseFloat(price),
                 categoryId: +categoryId,
                 vendorId: +vendorId,
+                images: JSON.stringify(images),
             },
         });
 
@@ -49,7 +51,7 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
                 stock: true,
                 isArchived: true,
                 createdAt: true,
-                images: { select: { uri: true } },
+                images: true,
             },
         });
         res.json(products);
@@ -69,7 +71,7 @@ const getProduct = async (req: Request, res: Response, next: NextFunction) => {
                 stock: true,
                 isArchived: true,
                 createdAt: true,
-                images: { select: { uri: true } },
+                images: true,
             },
         });
         res.json(product);

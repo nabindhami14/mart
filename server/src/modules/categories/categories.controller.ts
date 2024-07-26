@@ -23,7 +23,7 @@ const createCategoery = async (
         }
 
         await prisma.category.create({
-            data: { name, vendorId },
+            data: { name, vendorId: parseInt(vendorId) },
         });
 
         res.status(201).json({});
@@ -64,7 +64,15 @@ const getCategories = async (
     next: NextFunction
 ) => {
     try {
-        const categories = await prisma.category.findMany();
+        const categories = await prisma.category.findMany({
+            include: {
+                vendor: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+        });
         res.json(categories);
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
