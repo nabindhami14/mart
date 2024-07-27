@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
-import toast from "react-hot-toast";
 import { useRef } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ import { useToken } from "@/contexts/access-token";
 
 const CustomerLogin = () => {
   const navigate = useNavigate();
-  const setToken = useToken((state) => state.setToken);
+  const { setToken, setUser } = useToken();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -30,6 +30,7 @@ const CustomerLogin = () => {
     mutationFn: customerLogin,
     onSuccess: (response) => {
       setToken(response.data.accessToken);
+      setUser(response.data.user.id, response.data.user.role);
       navigate("/");
     },
     onError: (err: any) => {

@@ -21,7 +21,7 @@ import { useToken } from "@/contexts/access-token";
 
 const VendorLogin = () => {
   const navigate = useNavigate();
-  const setToken = useToken((state) => state.setToken);
+  const { setToken, setUser } = useToken();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -30,6 +30,7 @@ const VendorLogin = () => {
     mutationFn: vendorLogin,
     onSuccess: (response) => {
       setToken(response.data.accessToken);
+      setUser(response.data.user.id, response.data.user.role);
       navigate(`/vendors/${response.data.vendorId}/dashboard/home`);
     },
     onError: (err: any) => {

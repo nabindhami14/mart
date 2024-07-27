@@ -22,11 +22,15 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useToken } from "@/contexts/access-token";
 
 const AdminLayout = () => {
-  const { token, setToken } = useToken();
+  const { token, user, setToken } = useToken();
   const navigate = useNavigate();
 
-  if (!token) {
+  if (token === "") {
     return <Navigate to={"/admin/auth/login"} replace />;
+  }
+
+  if (user.role !== "ADMIN") {
+    return <Navigate to={"/"} replace />;
   }
   const handleLogout = () => {
     setToken("");

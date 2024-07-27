@@ -2,8 +2,6 @@
 import { Outlet } from "react-router-dom";
 
 const AdminAuthLayout = () => {
-  // const token = useToken((state) => state.token);
-
   return (
     <>
       <Outlet />

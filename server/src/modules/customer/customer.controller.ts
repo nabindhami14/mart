@@ -72,7 +72,10 @@ const loginCustomer = async (
             }
         );
 
-        res.json({ accessToken });
+        res.json({
+            accessToken,
+            user: { id: customer.id, role: customer.role },
+        });
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }

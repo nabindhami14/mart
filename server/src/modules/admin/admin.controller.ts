@@ -1,10 +1,9 @@
-import bcrypt from "bcrypt";
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 
-import prisma from "../../config/db";
 import config from "../../config";
+import prisma from "../../config/db";
 
 export const loginAdmin = async (
     req: Request,
@@ -37,7 +36,7 @@ export const loginAdmin = async (
             }
         );
 
-        res.json({ accessToken });
+        res.json({ accessToken, user: { id: admin.id, role: admin.role } });
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }

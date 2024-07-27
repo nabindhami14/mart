@@ -11,6 +11,7 @@ model Admin {
   id       Int    @id @default(autoincrement())
   email    String @unique
   password String
+  role     Role   @default(ADMIN)
 }
 
 model Customer {
@@ -19,8 +20,9 @@ model Customer {
   email    String  @unique
   password String
   isActive Boolean @default(true)
+  role     Role    @default(CUSTOMER)
 
-  orders Order[]
+  orders   Order[]
   payments Payment[]
 
   createdAt DateTime @default(now())
@@ -37,6 +39,7 @@ model Vendor {
   phone       String?
   location    String?
   isVerified  Boolean @default(false)
+  role        Role    @default(VENDOR)
 
   products   Product[]
   categories Category[]
@@ -84,9 +87,9 @@ model Product {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
+  id     Int         @id @default(autoincrement())
   amount Float       @default(0.00)
-  status      OrderStatus @default(PENDING)
+  status OrderStatus @default(PENDING)
 
   customerId Int
   customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
@@ -101,7 +104,7 @@ model Order {
 }
 
 model OrderItem {
-  id       Int   @id @default(autoincrement())
+  id       Int @id @default(autoincrement())
   quantity Int
 
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
@@ -114,20 +117,20 @@ model OrderItem {
 }
 
 model Payment {
-  id     Int           @id @default(autoincrement())
-  method PaymentMethod @default(ONLINE)
-  pidx       String
-  transactionId       String?
-  payment_url       String
-  status  PaymentStatus @default(PENDING)
-  provider PaymentProvider @default(KHALTI)
-  amount Float         @default(0.00)
-  date   DateTime      @default(now())
+  id            Int             @id @default(autoincrement())
+  method        PaymentMethod   @default(ONLINE)
+  pidx          String
+  transactionId String?
+  payment_url   String
+  status        PaymentStatus   @default(PENDING)
+  provider      PaymentProvider @default(KHALTI)
+  amount        Float           @default(0.00)
+  date          DateTime        @default(now())
 
-  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId Int   @unique
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int      @unique
   customerId Int
-  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
 }
@@ -184,6 +187,7 @@ enum OrderStatus {
   DELIVERED
   CANCELLED
 }
+
 enum PaymentStatus {
   PENDING
   FAILED
@@ -194,7 +198,14 @@ enum PaymentMethod {
   ONLINE
   DELIVERY
 }
+
 enum PaymentProvider {
   KHALTI
   ESEWA
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+  VENDOR
 }

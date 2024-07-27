@@ -76,7 +76,11 @@ const loginVendor = async (req: Request, res: Response, next: NextFunction) => {
             }
         );
 
-        res.json({ accessToken, vendorId: vendor.id });
+        res.json({
+            accessToken,
+            vendorId: vendor.id,
+            user: { id: vendor.id, role: vendor.role },
+        });
     } catch (err) {
         return next(createHttpError(500, "Internal server error"));
     }

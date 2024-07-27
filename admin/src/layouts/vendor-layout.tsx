@@ -31,10 +31,14 @@ import {
 const VendorLayout = () => {
   const navigate = useNavigate();
   const { vendorId } = useParams();
-  const { token, setToken } = useToken();
+  const { token, user, setToken } = useToken();
 
   if (!token) {
     return <Navigate to={"/vendors/auth/login"} replace />;
+  }
+
+  if (user.role !== "VENDOR") {
+    return <Navigate to={"/"} replace />;
   }
 
   const handleLogout = () => {

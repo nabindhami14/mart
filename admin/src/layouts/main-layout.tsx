@@ -7,6 +7,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 const MainLayout = () => {
   const { token, setToken } = useToken();
   const { items } = useCart();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
